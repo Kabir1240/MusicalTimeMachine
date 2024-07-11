@@ -4,10 +4,19 @@ import re
 
 
 def get_billboard_top_100(date:str) -> tuple[list, list]:
-    URL = "https://www.billboard.com/charts/hot-100/{DATE}"
+    """
+    Scrapes the top 100 billboard tracks and their respective artists for a given year
+
+    :param date: date to scrape
+    :type date: str
+    :return: tracks and their respective artists
+    :rtype: tuple[list, list]
+    """
+    
+    url = "https://www.billboard.com/charts/hot-100/{DATE}"
 
     # get html data and create soup
-    response = requests.get(url=URL.replace("{DATE}", date))
+    response = requests.get(url=url.replace("{DATE}", date))
     soup = BeautifulSoup(response.text, 'html.parser')
 
     # find titles of songs
