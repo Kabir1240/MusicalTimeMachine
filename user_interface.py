@@ -69,5 +69,3 @@ class MusicalTimeMachineUserInterface:
             spotify.add_songs_to_playlist(playlist_uri=playlist_uri, track_uris=track_uris)
             
             update_label.config(text="Done! Go check out your spotify!")
-            
-ui = MusicalTimeMachineUserInterface()

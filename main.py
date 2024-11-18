@@ -1,11 +1,5 @@
+from user_interface import MusicalTimeMachineUserInterface
 
 
-
-def main() -> None:
-    """
-    Asks user to enter a date. Scrapes songs from billboard top 100 on that date. Adds those songs to a spotify playlist.
-    """
-
-
-
-main()
+if __name__ == "__main__":
+    MusicalTimeMachineUserInterface()
