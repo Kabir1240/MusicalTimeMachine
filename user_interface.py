@@ -29,7 +29,12 @@ class MusicalTimeMachineUserInterface:
         label_1.grid(row=0, column=0)
         label_2.grid(row=1, column=0, pady=10, columnspan=3)
         
-        self.tk_widgets.add_label(key="date", label=label_1)
+        label_dict = {
+            "date": label_1,
+            "status": label_2,
+        }
+        
+        self.tk_widgets.add_label_dict(label_dict=label_dict)
     
     def create_entries(self):
         entry_1 = Entry()
@@ -49,25 +54,41 @@ class MusicalTimeMachineUserInterface:
         progress_bar_1.grid(row=2, column=0, columnspan=3)
         
         progress_bar_1["value"] = 0
+        
+        self.tk_widgets.add_progress_bar(key="status", progress_bar=progress_bar_1)
+    
+    def update_status(self, current_step: str, percentage: int):
+        status_label = self.tk_widgets.get_labels(key="status")
+        status_bar = self.tk_widgets.get_progress_bar(key="status")
+        
+        status_label.config(text=current_step)
+        status_bar['value'] = percentage    
     
     def start_machine(self):
             # get date from user
             date = self.tk_widgets.get_entries(key="date").get()
-                        
+            
+            self.update_status(current_step=f"Retrieving track names...", percentage=5)    
             # get billboard top 100 songs
             tracks, artists = get_billboard_top_100(date=date)
             spotify = Spotify()
             
+            self.update_status(current_step="Searching for songs...", percentage=25)
             # search for tracks
             track_uris = []
             for track_index in range(len(tracks)):
                 query = f"track: {tracks[track_index]} artist: {artists[track_index]}"
                 track_uris += spotify.search(query=query, limit=1)
             
+            self.update_status(current_step=f"Creating playlist...", percentage=50)
             # create playlist and add tracks
-            playlist_uri = spotify.create_playlist(name=date + " Billboard 100")['uri']
-            spotify.add_songs_to_playlist(playlist_uri=playlist_uri, track_uris=track_uris)
+            playlist_uri = spotify.create_playlist(name=f"{date} Billboard 100")['uri']
             
+            self.update_status(current_step="Adding tracks...", percentage=75)
+            spotify.add_songs_to_playlist(playlist_uri=playlist_uri, track_uris=track_uris)
+            self.update_status(current_step="", percentage=20)
+            
+            self.update_status(current_step="Done!", percentage=100)
             # inform user when the operation is complete
             messagebox.showinfo("Task Complete", "Check your spotify!")
             self.tk_widgets.get_buttons(key="enter").config(state="normal")
