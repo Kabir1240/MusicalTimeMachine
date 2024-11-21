@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Label, Entry, Button, Canvas, ttk
 from typing import Dict
 
 
@@ -31,6 +31,8 @@ class TkinterWidgets:
             self.canvas_dict = canvas_dict
         else:
             self.canvas_dict = {}
+        
+        self.progress_bar_dict = {}
 
     def get_labels(self, key: str | None = None) -> Label | Dict[str, Label]:
         """
@@ -69,12 +71,24 @@ class TkinterWidgets:
         """
         returns Canvas widgets
         :param key: Key for the Canvas. If none is given, the entire dictionary will be returned
-        :return: either a single Canvas if key is given, otherwise the entire Button dictionary
+        :return: either a single Canvas if key is given, otherwise the entire Cavas dictionary
         """
         if key is not None:
             return self.canvas_dict[key]
         else:
             return self.canvas_dict
+    
+    def get_progress_bar(self, key: str | None = None) -> ttk.Progressbar | Dict[str, ttk.Progressbar]:
+        """
+        returns Progressbar widgets
+        :param key: Key for the Progressbar. If none is given, the entire dictionary will be returned
+        :return: either a single Progressbar if key is given, otherwise the entire Progressbar dictionary
+        """
+        
+        if key is not None:
+            return self.progress_bar_dict[key]
+        else:
+            return self.progress_bar_dict
 
     def add_label(self, key: str, label: Label) -> None:
         """
@@ -111,6 +125,15 @@ class TkinterWidgets:
         :return: None
         """
         self.canvas_dict[key] = canvas
+    
+    def add_progress_bar(self, key:str, progress_bar: ttk.Progressbar) -> None:
+        """
+        adds a single Progressbar object to the progress_bar dictionary at key position
+        :param key: key
+        :param progress_bar: Progressbar object
+        :return: None
+        """
+        self.progress_bar_dict[key] = progress_bar
 
     def add_label_dict(self, label_dict: Dict[str, Label]) -> None:
         """
@@ -147,3 +170,12 @@ class TkinterWidgets:
         """
         for (key, value) in canvas_dict.items():
             self.canvas_dict[key] = value
+
+    def add_progress_bar_dict(self, progress_bar_dict: Dict[str, ttk.Progressbar]) -> None:
+        """
+        adds all Progressbars from progress_bar_dict to current Canvas repository
+        :param canvas_dict: a dictionary of progress_bar objects
+        :return: None
+        """
+        for (key, value) in progress_bar_dict.items():
+            self.progress_bar_dict_dict[key] = value
